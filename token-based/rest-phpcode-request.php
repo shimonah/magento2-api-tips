@@ -1,8 +1,7 @@
 <?php
 
 $userData = array("username" => "your-username", "password" => "your-password");
-var_dump(json_encode($userData));
-die('stop');
+
 $ch = curl_init("http://magento2.loc/index.php/rest/V1/integration/admin/token");
 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($userData));
