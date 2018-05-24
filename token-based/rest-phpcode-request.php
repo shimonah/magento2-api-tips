@@ -1,3 +1,5 @@
+<?php
+
 $userData = array("username" => "alexey", "password" => "ghjdjlybr+7");
 var_dump(json_encode($userData));
 die('stop');
@@ -17,3 +19,5 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json", "Au
 $result = curl_exec($ch);
 
 var_dump($result);
+
+?>
