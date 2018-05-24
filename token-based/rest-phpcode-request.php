@@ -1,6 +1,6 @@
 <?php
 
-$userData = array("username" => "alexey", "password" => "ghjdjlybr+7");
+$userData = array("username" => "username", "password" => "password");
 var_dump(json_encode($userData));
 die('stop');
 $ch = curl_init("http://magento2.loc/index.php/rest/V1/integration/admin/token");
