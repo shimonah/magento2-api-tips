@@ -1,0 +1,316 @@
+base url: http://local.tupperware.com/
+token: 5lr4fckd8xopgt6g1o41l088xxozxze0
+********************************************
+For logged in user
+==================
+step 1 - create customer:
+
+URL: http://local.tupperware.com/rest/default/V1/customers
+Method: POST
+Headers:
+Authorization: Bearer 5lr4fckd8xopgt6g1o41l088xxozxze0
+Content-Type: application/json
+(in header is used admin token)
+
+Body:
+{
+  "customer": {
+    "email": "provodnik357@gmail.com",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "addresses": [{
+      "defaultShipping": true,
+      "defaultBilling": true,
+      "firstname": "Jane",
+      "lastname": "Doe",
+      "region": {
+        "regionCode": "NY",
+        "region": "New York",
+        "regionId":43
+      },
+      "postcode": "10755",
+      "street": ["123 Oak Ave"],
+      "city": "Purchase",
+      "telephone": "512-555-1111",
+      "countryId": "US"
+    }]
+  },
+  "password": "admin123+56"
+}
+====================================
+Get the customer’s access token
+
+URL: http://local.tupperware.com/rest/default/V1/integration/customer/token
+Method: POST
+Headers:
+Authorization: Bearer 5lr4fckd8xopgt6g1o41l088xxozxze0
+Content-Type: application/json
+(in header is used admin token)
+
+body:
+{
+  "username": "provodnik357@gmail.com",
+  "password": "admin123+56"
+}
+
+response:
+o0v41ej0m236epdhtqohczm7kfi75dlq
+
+====================================
+create quote:
+
+http://local.tupperware.com/rest/default/V1/carts/mine
+Method: POST
+Headers:
+Authorization: Bearer o0v41ej0m236epdhtqohczm7kfi75dlq
+Content-Type: application/json
+(in header is used customer token)
+body: -
+response: 2888139
+==========================
+Add items to cart
+http://local.tupperware.com/rest/default/V1/carts/mine/items
+Method: POST
+Authorization: Bearer o0v41ej0m236epdhtqohczm7kfi75dlq
+Content-Type: application/json
+(in header is used customer token)
+body:
+{
+  "cartItem": {
+    "sku": "10136165000",
+    "qty": 1,
+    "quote_id": "2888139"
+  }
+}
+reponse:
+{
+    "item_id": 5863376,
+    "sku": "10136165000",
+    "qty": 1,
+    "name": "Universal Series Poultry Shears",
+    "product_type": "simple",
+    "quote_id": "2888139"
+}
+
+Items can be deleted from cart via API endpoints with DELETE methods
+=========================
+Estimate shipping methods (review allowed shipping methods for possible order)
+
+http://local.tupperware.com/rest/default/V1/carts/mine/estimate-shipping-methods
+
+Method: POST
+Header:
+Authorization: Bearer m9n5illmps5f9b6sjhpcbw1z46jf7cfm
+Content-Type: application/json
+(in header is used customer token)
+
+body:
+{  "address": {
+      "region": "New York",
+      "region_id": 43,
+      "region_code": "NY",
+      "country_id": "US",
+      "street": [
+        "123 Oak Ave"
+        ],
+      "postcode": "10577",
+      "city": "Purchase",
+      "firstname": "Jane",
+      "lastname": "Doe",
+      "customer_id": 4,
+      "email": "provodnik357@gmail.com",
+      "telephone": "(512) 555-1111",
+      "same_as_billing": 1
+  }
+}
+
+=========================================
+Apply shipping method
+
+URL: http://learnmigrationm2.magento2.local/rest/default/V1/carts/mine/shipping-information
+Method: POST
+Headers:
+Authorization: Bearer m9n5illmps5f9b6sjhpcbw1z46jf7cfm
+Content-Type: application/json
+(in header is used customer token)
+
+{  "addressInformation": {
+       "shipping_address": {
+       "region": "New York",
+       "region_id": 43,
+       "region_code": "NY",
+       "country_id": "US",
+       "street": [
+      "123 Oak Ave"
+    ],
+    "postcode": "10577",
+    "city": "Purchase",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "email": "provodnik357@gmail.com",
+    "telephone": "512-555-1111"
+  },
+  "billing_address": {
+    "region": "New York",
+    "region_id": 43,
+    "region_code": "NY",
+    "country_id": "US",
+    "street": [
+      "123 Oak Ave"
+    ],
+    "postcode": "10577",
+    "city": "Purchase",
+    "firstname": "Jane",
+    "lastname": "Doe",
+    "email": "provodnik357@gmail.com",
+    "telephone": "512-555-1111"
+  },
+  "shipping_carrier_code": "flatrate",
+  "shipping_method_code": "flatrate"
+  }
+}
+===========================================
+Create an order
+
+URL: http://learnmigrationm2.magento2.local/rest/default/V1/carts/mine/payment-information
+
+Method: POST
+Header:
+Authorization: Bearer m9n5illmps5f9b6sjhpcbw1z46jf7cfm
+Content-Type: application/json
+(in header is used customer token)
+
+body:
+{
+    "paymentMethod": {
+                "method": "cashondelivery"
+    },
+    "billing_address": {
+                "email": "provodnik357@gmail.com",
+            "region": "New York",
+            "region_id": 43,
+            "region_code": "NY",
+                "country_id": "US",
+                "street": ["123 Oak Ave"],
+                "postcode": "10577",
+                "city": "Purchase",
+                "telephone": "512-555-1111",
+                "firstname": "Jane",
+                "lastname": "Doe"
+    }
+}
+
+============================================
+Get order/ check order
+
+URL: http://learnmigrationm2.magento2.local/rest/default/V1/orders/1
+(last values is order ID)
+Method:GET
+Headers:
+Authorization: Bearer 5lr4fckd8xopgt6g1o41l088xxozxze0
+Content-Type: application/json
+(in header is used admin token)
+
+============================================
+Create invoice
+
+body:
+{
+  "capture": true,
+  "notify": true
+}
+============================================
+View invoice
+
+http://learnmigrationm2.magento2.local/rest/default/V1/orders/1
+Method: GET
+Headers:
+Authorization: Bearer 5lr4fckd8xopgt6g1o41l088xxozxze0
+Content-Type: application/json
+(in header is used admin token)
+
+*************************************************
+For Guest users
+================================================================
+Create empty cart for the guest customer
+
+URL: http://learnmigrationm2.magento2.local/rest/V1/guest-carts/
+Headers:
+Authorization: Bearer 5lr4fckd8xopgt6g1o41l088xxozxze0
+Content-Type: application/json
+(in header is used admin token)
+Method: GET
+
+possible response:
+MSp2o2oliJwzCWAVycqdm0IyvU9qE5UQ
+=================================================================
+Add items to cart
+
+URL: http://learnmigrationm2.magento2.local/rest/V1/guest-carts/MSp2o2oliJwzCWAVycqdm0IyvU9qE5UQ/items
+(guest-cart GET param values is cart ID from previous response)
+Headers:
+Content-Type: application/json
+(in header is used admin token)
+Method: POST
+
+body:
+{ 
+  "cartItem": { 
+    "quote_id": "MSp2o2oliJwzCWAVycqdm0IyvU9qE5UQ",
+    "sku": "product",
+    "qty": 1 
+  }
+}
+================================================
+Add Shipping information
+(estimating shipping can be done in guest too)
+
+URL: http://learnmigrationm2.magento2.local/rest/V1/guest-carts/MSp2o2oliJwzCWAVycqdm0IyvU9qE5UQ/shipping-information
+Headers:
+Content-Type: application/json
+
+{ "addressInformation": 
+ { "shippingAddress": 
+  { 
+    "country_id": "US", "street": [ "Street Address" ],
+    "company": "Company",
+    "telephone": "2313131312",
+    "postcode": "123",
+    "city": "California",
+    "firstname": "john",
+    "lastname": "harrison",
+    "email": "guestuser@gmail.com",
+    "sameAsBilling": 1
+  },
+  "billingAddress": { 
+    "country_id": "US",
+    "street": [ "Street Address" ],
+    "company":"Company",
+    "telephone": "2313131312",
+    "postcode": "123",
+    "city": "California",
+    "firstname": "john",
+    "lastname": "harrison",
+    "email": "guestuser@gmail.com" 
+  },
+  "shipping_method_code": "flatrate",
+  "shipping_carrier_code": "flatrate"
+ }
+}
+
+================================================
+Add payment method:
+
+URL: http://learnmigrationm2.magento2.local/rest/V1/guest-carts/MSp2o2oliJwzCWAVycqdm0IyvU9qE5UQ/order
+
+Headers:
+Content-Type: application/json
+
+body:
+{ 
+  "paymentMethod": { 
+    "method": "checkmo" 
+  } 
+}
+================================================
+*************************************************
